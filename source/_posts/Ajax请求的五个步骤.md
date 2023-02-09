@@ -2,10 +2,10 @@
 
 title: Ajax请求的五个步骤
 ---
-*  Ajax：即异步 JavaScript 和XML。Ajax是一种用于创建快速动态网页的技术。通过在后台与服务器进行少量数据交换，Ajax可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。而传统的网页(不使用 Ajax)如果需要更新内容，必需重载整个网页面。
+  * ——Ajax简介——：ajax即异步 JavaScript 和XML。Ajax是一种用于创建快速动态网页的技术。通过在后台与服务器进行少量数据交换，Ajax可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。而传统的网页(不使用 Ajax)如果需要更新内容，必需重载整个网页面。
   
-* ajax的工作原理：客户端发送请求，请求交给xhr，xhr把请求提交给服务，服务器进行业务处理，服务器响应数据交给xhr对象，xhr对象接收数据，由javascript把数据写到页面上。
-## 实现AJAX的基本步骤：
+  * ajax的工作原理：客户端发送请求，请求交给xhr，xhr把请求提交给服务，服务器进行业务处理，服务器响应数据交给xhr对象，xhr对象接收数据，由javascript把数据写到页面上
+### 实现AJAX的基本步骤：
 
 * 要完整实现一个AJAX异步调用和局部刷新,通常需要以下几个步骤:
 
@@ -16,8 +16,7 @@ title: Ajax请求的五个步骤
 5. 获取异步调用返回的数据。
 6. 使用JavaScript和DOM实现局部刷新。
 
-## 一.创建XMLHttpRequest对象
-
+### 一.创建XMLHttpRequest对象
 
 1. 不同浏览器使用的异步调用对象有所不同，在IE浏览器中异步调用使用的是XMLHTTP组件中的XMLHttpRequest对象，而在Netscape、Firefox浏览器中则直接使用XMLHttpRequest组件。因此，在不同浏览器中创建XMLHttpRequest对象的方式都有所不同。
 
@@ -28,9 +27,10 @@ title: Ajax请求的五个步骤
 
 var xmlHttpRequest = new XMLHttpRequest();
 
-#### 由于无法确定用户使用的是什么浏览器,所以在创建XMLHttpRequest对象时,最好将以上两种方法都加上.如以下代码所示:
+**由于无法确定用户使用的是什么浏览器,所以在创建XMLHttpRequest对象时,最好将以上两种方法都加上.如以下代码所示:**
 
-    var xmlHttpRequest;  //定义一个变量,用于存放XMLHttpRequest对象
+ ```ruby
+ var xmlHttpRequest;  //定义一个变量,用于存放XMLHttpRequest对象
     createXMLHttpRequst();   //调用创建对象的方法
     //创建XMLHttpRequest对象的方法 
     function createXMLHttpRequest(){                                                 
@@ -39,22 +39,19 @@ var xmlHttpRequest = new XMLHttpRequest();
         }else if(window.XMLHttpRequest){//判断是否是Netscape等其他支持XMLHttpRequest组件的浏览器
             xmlHttpRequest = new XMLHttpRequest();//创建其他浏览器上的XMLHttpRequest对象
         }
-    }
+    } 
+ ```
+  
 
 1. "if(window.ActiveXObject)"用来判断是否使用IE浏览器.其中ActiveXOject并不是Windows对象的标准属性,而是IE浏览器中专有的属性,可以用于判断浏览器是否支持ActiveX控件.通常只有IE浏览器或以IE浏览器为核心的浏览器才能支持Active控件.
 
 2. "else if(window.XMLHttpRequest)"是为了防止一些浏览器既不支持ActiveX控件,也不支持XMLHttpRequest组件而进行的判断.其中XMLHttpRequest也不是window对象的标准属性,但可以用来判断浏览器是否支持XMLHttpRequest组件.
 
 3. 如果浏览器既不支持ActiveX控件,也不支持XMLHttpRequest组件,那么就不会对xmlHttpRequest变量赋值.
-## 二.创建HTTP请求
+### 二.创建HTTP请求
 
 1. 创建了XMLHttpRequest对象之后，必须为XMLHttpRequest对象创建HTTP请求，用于说明XMLHttpRequest对象要从哪里获取数据。通常可以是网站中的数据,也可以是本地中其他文件中的数据。
-
-#### 创建HTTP请求可以使用XMLHttpRequest对象的open()方法,其语法代码如下所示:
-
-XMLHttpRequest.open(method,URL,flag,name,password);
-
-#### 代码中的参数解释如下所示:
+__创建HTTP请求可以使用XMLHttpRequest对象的open()方法,其语法代码如下所示:__
 
 * method：该参数用于指定HTTP的请求方法，一共有get、post、head、put、delete五种方法，常用的方法为get和post。
 
@@ -66,7 +63,7 @@ XMLHttpRequest.open(method,URL,flag,name,password);
 
 * password：该参数为可选，用于输入密码。若服务器需要验证，则必须使用该参数。
 
-2. 通常可以使用以下代码来访问一个网站文件的内容。      
+1. 通常可以使用以下代码来访问一个网站文件的内容。      
 
 xmlHttpRequest.open("get","http://www.aspxfans.com/BookSupport/JavaScript/ajax.htm",true);
 
@@ -76,7 +73,7 @@ xmlHttpRequest.open("get","ajax.htm",true);
 
 * 注意：如果HTML文件放在Web服务器上，在Netscape浏览器中的JavaScript安全机制不允许与本机之外的主机进行通信。也就是说，使用open()方法只能打开与HTML文件在同一个服务器上的文件。而在IE浏览器中则无此限制（虽然可以打开其他服务器上的文件，但也会有警告提示）。
 
-## 三.设置响应HTTP请求状态变化的函数
+### 三.设置响应HTTP请求状态变化的函数
 
 1. 创建完HTTP请求之后，应该就可以将HTTP请求发送给Web服务器了。然而，发送HTTP请求的目的是为了接收从服务器中返回的数据。从创建XMLHttpRequest对象开始，到发送数据、接收数据、XMLHttpRequest对象一共会经历以下5中状态。
 2. 
@@ -101,23 +98,22 @@ xmlHttpRequest.open("get","ajax.htm",true);
         }
     }
 
-## 四.设置获取服务器返回数据的语句
+### 四.设置获取服务器返回数据的语句
 
 1. 如果XMLHttpRequest对象的readyState属性值等于4，表示异步调用过程完毕，就可以通过XMLHttpRequest对象的responseText属性或responseXml属性来获取数据。
 
 2. 但是，异步调用过程完毕，并不代表异步调用成功了，如果要判断异步调用是否成功，还要判断XMLHttpRequest对象的status属性值，只有该属性值为200，才表示异步调用成功，因此，要获取服务器返回数据的语句，还必须要先判断XMLHttpRequest对象的status属性值是否等于200，
-  
-#### 如以下代码所示：
-
+  __如以下代码所示：__
+```ruby
      if(xmlHttpRequst.status == 200) {
         document.write(xmlHttpRequest.responseText);//将返回结果以字符串形式输出
         //document.write(xmlHttpRequest.responseXML);//或者将返回结果以XML形式输出
      }
-
+```
 3. 注意：如果HTML文件不是在Web服务器上运行，而是在本地运行，则xmlHttpRequest.status的返回值为0。因此，如果该文件在本地运行，则应该加上xmlHttpRequest.status == 0的判断。
 
-#### 通常将以上代码放在响应HTTP请求状态变化的函数体内，如以下代码所示：       
-
+__通常将以上代码放在响应HTTP请求状态变化的函数体内，如以下代码所示__       
+```ruby
     //设置当XMLHttpRequest对象状态改变时调用的函数，注意函数名后面不要添加小括号
     xmlHttpRequest.onreadystatechange = getData;
      
@@ -131,12 +127,12 @@ xmlHttpRequest.open("get","ajax.htm",true);
             }
         }
     }
-
-## 五.发送HTTP请求
+```
+### 五.发送HTTP请求
 
 1. 在经过以上几个步骤的设置之后，就可以将HTTP请求发送到Web服务器上去了。发送HTTP请求可以使用XMLHttpRequest对象的send()方法。
  
-#### 其语法代码如下所示：
+___ 其语法代码如下所示：__
 
 XMLHttpRequest.send(data);
 
@@ -145,7 +141,7 @@ XMLHttpRequest.send(data);
 name=myName&value=myValue
 
 3. 只有在使用send()方法之后，XMLHttpRequest对象的readyState属性值才会开始改变，也才会激发readystatechange事件，并调用函数。
-## 六.局部更新
+### 六.局部更新
 1. 在通过Ajax的异步调用获得服务器端数据之后，可以使用JavaScript或DOM来将网页中的数据进行局部更新。
   
 
